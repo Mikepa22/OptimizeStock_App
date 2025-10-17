@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Traslados - Cielito</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>Generador de Traslados</h1>
+                <img src="/static/images/logo_cielito.png" alt="Cielito Logo" class="logo" onerror="this.style.display='none'">
+            </div>
+            <p class="subtitle">Sistema automatizado de optimización de inventario</p>
+        </header>
+
+        <!-- Description -->
+        <section class="description">
+            <p>
+                Esta aplicación analiza las ventas y el inventario actual para generar recomendaciones 
+                inteligentes de traslados entre tiendas, optimizando la distribución de productos según 
+                la demanda real de cada ubicación.
+            </p>
+        </section>
+
+        <!-- Configuration Form -->
+        <section class="config-section">
+            <h2>Configuración</h2>
+            
+            <form id="configForm">
+                <!-- Meses de análisis -->
+                <div class="form-group">
+                    <label for="meses">
+                        <strong>Meses de análisis</strong>
+                        <span class="help-text">Cantidad de meses históricos de ventas a considerar</span>
+                    </label>
+                    <input type="number" id="meses" name="meses" min="1" max="12" value="2" required>
+                </div>
+
+                <!-- Días de cobertura -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dias_min">
+                            <strong>Días mínimos de cobertura</strong>
+                            <span class="help-text">Stock mínimo objetivo en días</span>
+                        </label>
+                        <input type="number" id="dias_min" name="dias_min" min="1" max="30" value="7" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="dias_max">
+                            <strong>Días máximos de cobertura</strong>
+                            <span class="help-text">Stock máximo objetivo en días</span>
+                        </label>
+                        <input type="number" id="dias_max" name="dias_max" min="1" max="30" value="14" required>
+                    </div>
+                </div>
+
+                <!-- Safety Ratio -->
+                <div class="form-group">
+                    <label for="safety_ratio">
+                        <strong>Ratio de seguridad para drenaje</strong>
+                        <span class="help-text">Porcentaje de inventario a conservar en bodega (0.1 = 10%, 0.3 = 30%)</span>
+                    </label>
+                    <input type="number" id="safety_ratio" name="safety_ratio" min="0" max="1" step="0.1" value="0.3" required>
+                </div>
+
+                <!-- Flags -->
+                <div class="flags-section">
+                    <h3>Opciones Avanzadas</h3>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="debug" name="debug">
+                        <label for="debug">
+                            <strong>Modo Debug</strong>
+                            <span class="help-text">Genera logs detallados del proceso</span>
+                        </label>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="save_intermediates" name="save_intermediates">
+                        <label for="save_intermediates">
+                            <strong>Guardar archivos intermedios</strong>
+                            <span class="help-text">Exporta ventas y stock procesados para auditoría</span>
+                        </label>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="allow_seed" name="allow_seed">
+                        <label for="allow_seed">
+                            <strong>Permitir siembra de referencias nuevas</strong>
+                            <span class="help-text">Permite enviar productos nuevos a tiendas sin historial</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" id="generateBtn" class="btn-primary">
+                    <span id="btnText">Generar Traslados</span>
+                </button>
+            </form>
+        </section>
+
+        <!-- Progress Section -->
+        <section id="progressSection" class="progress-section hidden">
+            <h2>Progreso</h2>
+            <div class="progress-bar">
+                <div id="progressFill" class="progress-fill"></div>
+                <span id="progressText" class="progress-text">0%</span>
+            </div>
+            <p id="progressStage" class="progress-stage"></p>
+        </section>
+
+        <!-- Results Section -->
+        <section id="resultsSection" class="results-section hidden">
+            <h2>Resultados</h2>
+            <div id="resultsContent"></div>
+        </section>
+
+        <!-- Error Section -->
+        <section id="errorSection" class="error-section hidden">
+            <h2>Error</h2>
+            <div id="errorContent" class="error-content"></div>
+            <button onclick="resetApp()" class="btn-secondary">Intentar de nuevo</button>
+        </section>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
